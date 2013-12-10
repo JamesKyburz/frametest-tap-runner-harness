@@ -1,0 +1,29 @@
+{
+  "name": "frametest-tap-runner-harness",
+  "description": "tap test runner harness for frametest",
+  "version": "0.0.0",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "test",
+    "iframe",
+    "automation",
+    "tap"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jameskyburz/frametest-tap-runner-harness.git"
+  },
+  "author": {
+    "name": "James Kyburz",
+    "email": "james.kyburz@gmail.com"
+  },
+  "dependencies": {
+    "through": "~2.3.4",
+    "tap-parser": "~0.2.1",
+    "frametest": "0.0.0",
+    "tape": "~2.3.0"
+  },
+  "devDependencies": {},
+  "license": "MIT"
+}
