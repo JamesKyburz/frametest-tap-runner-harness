@@ -122,10 +122,6 @@ module.exports = function(opt) {
     }
   }
 
-  function getTextByElement(element) {
-    return element[('textContent' in element ? 'textContent' : 'innerText')];
-  }
-
   function harness() {
     wnd = this.iframe.contentWindow;
     ctx = this;
@@ -149,16 +145,10 @@ module.exports = function(opt) {
 
 
     Function(['__ctx', '__helpers'], 'with(__ctx) {with(__helpers){' + testPlan() + '}}')({
-      redirect: redirect,
       waitFor: opt.cssSelector ? waitForAll : waitFor,
       waitForAll: waitForAll,
       test: harness,
-      text: getTextByElement,
-    }, opt.helpers || {});
-  }
-
-  function redirect(href) {
-    wnd.location.href = href;
+    }, opt.helpers? opt.helpers(ctx) : {});
   }
 
   function logBrowserErrors(e) {
