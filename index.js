@@ -46,7 +46,16 @@ module.exports = function(opt) {
       } else {
         ctx.logInfo('completed all tests!');
       }
+      adjustLogAreaScroll();
     });
+  }
+
+  function adjustLogAreaScroll() {
+    var area = ctx.logArea;
+    if ('scrollHeight' in area &&
+        'scrollTop' in area) {
+        area.scrollTop = area.scrollHeight;
+    }
   }
 
   function reportTestStatus(description, elapsed, results) {
