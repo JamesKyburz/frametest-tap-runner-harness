@@ -67,7 +67,9 @@ module.exports = function(opt) {
       '?results=' +
       encodeURIComponent(JSON.stringify(results)) +
       '&details=' +
-      encodeURIComponent(JSON.stringify(testResults))
+      encodeURIComponent(JSON.stringify(testResults)) +
+      '&description=' +
+      encodeURIComponent(description)
     ;
 
     ctx.attach(report, 'load', function() {
