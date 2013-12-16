@@ -4,14 +4,15 @@ function createHelpers(context) {
   var helpers = {
     text: text,
     redirect: redirect,
+    window: null,
   };
 
-  Object.defineProperty(helpers, 'window', {
-    get: function() {
-      context.logInfo('getting window....');
-      return context.iframe.contentWindow;
-    }
-  });
+  load();
+  context.attach(context.iframe, 'load', load);
+
+  function load() {
+    helpers.window = context.iframe.contentWindow;
+  }
 
   return helpers;
 
