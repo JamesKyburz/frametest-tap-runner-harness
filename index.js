@@ -5,26 +5,21 @@ var tapParser = require('tap-parser');
 
 module.exports = function(opt) {
   opt.harness = harness;
-  var ctx, wnd, timeoutTimer, i=0, testResults, start;
+  var ctx, wnd, testResults, logResults;
+
   frameTest(opt);
 
   function forEach(a, cb) {
     for (var i = 0; i < a.length; i++) cb(a[i], i);
   }
 
-  function testPlan() {
-    return opt.testPlans[i];
-  }
-
   function createParser() {
     return tapParser(function(results) {
-      var plan = testPlan();
-      var description = testResults[1].split('#')[1];
-      clearTimeout(timeoutTimer);
+      clearTestTimer();
       if (results.ok) {
-        ctx.logSuccess(description + ' passed!');
+        ctx.logSuccess('passed!');
       } else {
-        ctx.logFailure(description + ' failed!');
+        ctx.logFailure('failed!');
       }
 
       forEach(results.pass, function(p) {
@@ -35,18 +30,9 @@ module.exports = function(opt) {
         ctx.logFailure(f.number + ' ' + f.name);
       });
 
-      if (!results.ok) showTestResults();
-      var elapsed = new Date().getTime() - start.getTime();
-      ctx.logInfo('elapsed: ' + elapsed + ' ms');
-      if (opt.reportTestStatusUrl) reportTestStatus(description, elapsed, results);
-      i++;
-      if (testPlan()) {
-        ctx.testCalled = false;
-        frameTest(opt);
-      } else {
-        ctx.logInfo('completed all tests!');
-        reportTestsComplete();
-      }
+      if (opt.reportTestStatusUrl) reportTestStatus(results);
+      ctx.logInfo('completed all tests!');
+      reportTestsComplete();
       adjustLogAreaScroll();
     });
   }
@@ -59,18 +45,14 @@ module.exports = function(opt) {
     }
   }
 
-  function reportTestStatus(description, elapsed, results) {
+  function reportTestStatus(results) {
     var report = document.createElement('iframe');
     report.style.display = 'none';
     report.src = opt.reportTestStatusUrl +
       '/' +
       (results.ok ? 'reportsuccess' : 'reportfailure') +
-      '?results=' +
-      encodeURIComponent(JSON.stringify(results)) +
-      '&details=' +
-      encodeURIComponent(JSON.stringify(testResults)) +
-      '&description=' +
-      encodeURIComponent(description)
+      '?details=' +
+      encodeURIComponent(JSON.stringify(testResults))
     ;
 
     ctx.attach(report, 'load', function() {
@@ -92,23 +74,33 @@ module.exports = function(opt) {
     document.querySelector('body').appendChild(report);
   }
 
-  function showTestResults() {
-    var line;
-    var lines = testResults.slice();
-    while(line = lines.shift()) ctx.logInfo(line);
-  }
-
   function createLogger() {
     return through((function() {
       testResults = [];
-      start = new Date();
       return function(line) {
+        if (/TAP version 13/.test(line)) {
+          clearTestTimer();
+          testTimer();
+        }
         if (line) {
+          ctx.logInfo(line);
+          adjustLogAreaScroll();
           testResults.push(line);
           this.emit('data', line);
         }
       };
     })());
+  }
+
+  function testTimer() {
+    testTimer.timer = setTimeout(function() {
+      ctx.logFailure('tests timed out');
+      logResults.end();
+    }, opt.maxWaitTime || 30000);
+  }
+
+  function clearTestTimer() {
+    clearTimeout(testTimer.timer);
   }
 
   var waitForAll = createWait('querySelectorAll', function exists(element) {
@@ -120,6 +112,7 @@ module.exports = function(opt) {
   });
 
   function createWait(method, exists) {
+    var time = new Date();
     return function wait(cssSelector, callback) {
       if (ctx.loaded) {
         var element = opt.cssSelector ?
@@ -148,22 +141,21 @@ module.exports = function(opt) {
     ctx.attach(window, 'error', logBrowserErrors);
     ctx.attach(wnd, 'error', logBrowserErrors);
 
-    var harness = test.createHarness();
-    var logResults;
-    harness.createStream().pipe(logResults = createLogger()).pipe(createParser());
-
-    timeoutTimer = setTimeout(function() {
-      clearTimeout(timeoutTimer);
-      logResults.end();
-      ctx.logFailure('incomplete, timed out');
-    }, opt.maxWaitTime || 10000);
-
-
-    Function(['__ctx', '__helpers'], 'with(__ctx) {with(__helpers){' + testPlan() + '}}')({
+    Function(['__ctx', '__helpers'], 'with(__ctx) {with(__helpers){' + opt.testPlans.join('') + '}}')({
       waitFor: opt.cssSelector ? waitForAll : waitFor,
       waitForAll: waitForAll,
-      test: harness,
+      test: testWrapper(),
     }, opt.helpers? opt.helpers(ctx) : {});
+  }
+
+  function testWrapper() {
+    var testHarness = test.createHarness();
+    logResults = createLogger();
+    testHarness.createStream().pipe(logResults).pipe(createParser());
+    return function(description, cb) {
+      frameTest(opt);
+      testHarness(description, cb);
+    }
   }
 
   function logBrowserErrors(e) {
