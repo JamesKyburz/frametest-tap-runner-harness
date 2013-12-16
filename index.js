@@ -45,6 +45,7 @@ module.exports = function(opt) {
         frameTest(opt);
       } else {
         ctx.logInfo('completed all tests!');
+        reportTestsComplete();
       }
       adjustLogAreaScroll();
     });
@@ -71,6 +72,18 @@ module.exports = function(opt) {
       '&description=' +
       encodeURIComponent(description)
     ;
+
+    ctx.attach(report, 'load', function() {
+      report.parentNode.removeChild(report);
+    });
+
+    document.querySelector('body').appendChild(report);
+  }
+
+  function reportTestsComplete() {
+    var report = document.createElement('iframe');
+    report.style.display = 'none';
+    report.src = opt.reportTestStatusUrl + '/end';
 
     ctx.attach(report, 'load', function() {
       report.parentNode.removeChild(report);
