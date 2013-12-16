@@ -134,12 +134,13 @@ module.exports = function(opt) {
     wnd = this.iframe.contentWindow;
     ctx = this;
 
+    ctx.attach(wnd, 'error', logBrowserErrors);
+
     if (ctx.testCalled) return;
     ctx.testCalled = true;
 
     ctx.detach(window, 'error', logBrowserErrors);
     ctx.attach(window, 'error', logBrowserErrors);
-    ctx.attach(wnd, 'error', logBrowserErrors);
 
     Function(['__ctx', '__helpers'], 'with(__ctx) {with(__helpers){' + opt.testPlans.join('') + '}}')({
       waitFor: opt.cssSelector ? waitForAll : waitFor,
