@@ -30,7 +30,7 @@ module.exports = function(opt) {
         ctx.logFailure(f.number + ' ' + f.name);
       });
 
-      if (opt.reportTestStatusUrl) reportTestStatus(results);
+      if (typeof opt.reportTestStatusUrl !== 'undefined') reportTestStatus(results);
       ctx.logInfo('completed all tests!');
       reportTestsComplete();
       adjustLogAreaScroll();
