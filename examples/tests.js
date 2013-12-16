@@ -28,7 +28,7 @@ function createHelpers(context) {
 var runner = require('../')({
   waitTimeout: 80,
   testUrl: '/start.html',
-  reportTestStatusUrl: 'http://localhost:1338',
+  reportTestStatusUrl: '//localhost:5555',
   helpers: createHelpers,
   testPlans: [
     fs.readFileSync('./test_plans/test_plan.js'),
