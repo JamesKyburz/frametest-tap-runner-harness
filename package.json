@@ -1,7 +1,7 @@
 {
   "name": "frametest-tap-runner-harness",
   "description": "tap test runner harness for frametest",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "index.js",
   "scripts": {},
   "keywords": [
@@ -21,7 +21,7 @@
   "dependencies": {
     "through": "~2.3.4",
     "tap-parser": "~0.2.1",
-    "frametest": "0.0.1",
+    "frametest": "0.0.2",
     "tape": "~2.3.0"
   },
   "devDependencies": {},
