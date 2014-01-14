@@ -31,9 +31,12 @@ module.exports = function(opt) {
         ctx.logFailure(f.number + ' ' + f.name);
       });
 
-      if (typeof opt.reportTestStatusUrl !== 'undefined') reportTestStatus(results);
+      if (typeof opt.reportTestStatusUrl !== 'undefined') {
+        reportTestStatus(results);
+        reportTestsComplete();
+      }
       ctx.logInfo('completed all tests!');
-      reportTestsComplete();
+
       adjustLogAreaScroll();
     });
   }
