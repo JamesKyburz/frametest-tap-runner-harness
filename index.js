@@ -1,3 +1,4 @@
+/*jshint evil:true */
 var frameTest = require('frametest')();
 var test      = require('tape');
 var through   = require('through');
@@ -125,9 +126,9 @@ module.exports = function(opt) {
       setTimeout((function(context) {
         return function() {
           wait.apply(context, [cssSelector, callback]);
-        }
+        };
       })(this), opt.waitForPoll || 90);
-    }
+    };
   }
 
   function harness() {
@@ -156,7 +157,7 @@ module.exports = function(opt) {
     return function(description, cb) {
       frameTest(opt);
       testHarness(description, cb);
-    }
+    };
   }
 
   function logBrowserErrors(e) {
@@ -169,4 +170,4 @@ module.exports = function(opt) {
       message += '\n' + key + '=' + e[key];
     return message;
   }
-}
+};
