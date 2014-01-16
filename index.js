@@ -146,9 +146,12 @@ module.exports = function(opt) {
     ctx.detach(window, 'error', logBrowserErrors);
     ctx.attach(window, 'error', logBrowserErrors);
 
+    ctx.waitFor = opt.cssSelector ? waitForAll : waitFor;
+    ctx.waitForAll = waitForAll;
+
     Function(['__ctx', '__helpers'], 'with(__ctx) {with(__helpers){' + opt.testPlans.join('') + '}}')({
-      waitFor: opt.cssSelector ? waitForAll : waitFor,
-      waitForAll: waitForAll,
+      waitFor: ctx.waitFor,
+      waitForAll: ctx.waitForAll,
       test: testWrapper(),
     }, opt.helpers? opt.helpers(ctx) : {});
   }
