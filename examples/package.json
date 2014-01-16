@@ -1,0 +1,25 @@
+{
+  "name": "examples",
+  "description": "example server",
+  "version": "0.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "stack": "~0.1.0",
+    "tiny-route": "~2.1.1",
+    "querystring": "~0.2.0",
+    "ecstatic": "~0.4.13",
+    "brfs": "0.0.8",
+    "browserify": "~3.20.0"
+  },
+  "devDependencies": {},
+  "scripts": {},
+  "author": {
+    "name": "James Kyburz",
+    "email": "james.kyburz@gmail.com"
+  },
+  "private": "true",
+  "license": "MIT",
+  "engine": {
+    "node": ">=0.10"
+  }
+}
