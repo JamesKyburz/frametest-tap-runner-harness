@@ -35,7 +35,7 @@ module.exports = function(opt) {
         reportTestStatus(results);
         reportTestsComplete();
       }
-      ctx.logInfo('completed all tests!');
+      ctx.logInfo('test run finished');
 
       adjustLogAreaScroll();
     });
