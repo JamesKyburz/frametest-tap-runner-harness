@@ -18,5 +18,11 @@ call:
 browserify -r frametest-tap-runner-harness -t brfs -r frametest > bundle.js
 ```
 
+# example
+```
+cd examples && npm install && node index
+open http://localhost:5555
+```
+
 # license
 MIT
