@@ -138,12 +138,14 @@ module.exports = function(opt) {
     wnd = this.iframe.contentWindow;
     ctx = this;
 
-    addLogBrowserErrors(wnd);
+    ctx.detach(wnd, 'error', logBrowserErrors);
+    ctx.attach(wnd, 'error', logBrowserErrors);
 
     if (ctx.testCalled) return;
     ctx.testCalled = true;
 
-    addLogBrowserErrors(window);
+    ctx.detach(window, 'error', logBrowserErrors);
+    ctx.attach(window, 'error', logBrowserErrors);
 
     ctx.waitFor = opt.cssSelector ? waitForAll : waitFor;
     ctx.waitForAll = waitForAll;
@@ -152,12 +154,7 @@ module.exports = function(opt) {
       waitFor: ctx.waitFor,
       waitForAll: ctx.waitForAll,
       test: testWrapper(),
-    }, opt.helpers? opt.helpers(ctx) : {});
-
-    function addLogBrowserErrors(w) {
-      ctx.detach(w, 'error', logBrowserErrors);
-      ctx.attach(w, 'error', logBrowserErrors);
-    }
+    }, opt.helpers ? opt.helpers(ctx) : {});
   }
 
   function testWrapper() {
