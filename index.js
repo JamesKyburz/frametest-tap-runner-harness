@@ -82,6 +82,7 @@ module.exports = function(opt) {
     return through((function() {
       testResults = [];
       return function(line) {
+        console.log(line);
         if (/TAP version 13/.test(line)) {
           clearTestTimer();
           testTimer();
