@@ -1,7 +1,7 @@
 /*jshint evil:true */
 var frameTest = require('frametest')();
 var test      = require('tape');
-var through   = require('through');
+var through   = require('through2');
 var tapParser = require('tap-parser');
 
 module.exports = function(opt) {
@@ -11,11 +11,12 @@ module.exports = function(opt) {
   frameTest(opt);
 
   function forEach(a, cb) {
-    for (var i = 0; i < a.length; i++) cb(a[i], i);
+    for (var i = 0; i < (a || []).length; i++) cb(a[i], i);
   }
 
   function createParser() {
     return tapParser(function(results) {
+      debugger
       clearTestTimer();
       if (results.ok) {
         ctx.logSuccess('passed!');
@@ -79,9 +80,9 @@ module.exports = function(opt) {
   }
 
   function createLogger() {
-    return through((function() {
+    return through.obj((function() {
       testResults = [];
-      return function(line) {
+      return function(line, enc, callback) {
         console.log(line);
         if (/TAP version 13/.test(line)) {
           clearTestTimer();
@@ -91,7 +92,8 @@ module.exports = function(opt) {
           ctx.logInfo(line);
           adjustLogAreaScroll();
           testResults.push(line);
-          this.emit('data', line);
+          this.push(line);
+          callback();
         }
       };
     })());

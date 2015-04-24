@@ -19,10 +19,10 @@
     "email": "james.kyburz@gmail.com"
   },
   "dependencies": {
-    "through": "~2.3.4",
-    "tap-parser": "~0.2.1",
     "frametest": "0.0.5",
-    "tape": "~2.3.0"
+    "tap-parser": "^1.0.4",
+    "tape": "^4.0.0",
+    "through2": "^0.6.5"
   },
   "devDependencies": {},
   "license": "MIT"
