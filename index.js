@@ -16,7 +16,6 @@ module.exports = function(opt) {
 
   function createParser() {
     return tapParser(function(results) {
-      debugger
       clearTestTimer();
       if (results.ok) {
         ctx.logSuccess('passed!');
