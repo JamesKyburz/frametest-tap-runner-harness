@@ -8,6 +8,8 @@ module.exports = function(opt) {
   opt.harness = harness;
   var ctx, wnd, testResults, logResults;
 
+  opt.helpers = opt.helpers || createHelpers;
+
   frameTest(opt);
 
   function forEach(a, cb) {
@@ -140,13 +142,11 @@ module.exports = function(opt) {
     wnd = this.iframe.contentWindow;
     ctx = this;
 
-    ctx.detach(wnd, 'error', logBrowserErrors);
     ctx.attach(wnd, 'error', logBrowserErrors);
 
     if (ctx.testCalled) return;
     ctx.testCalled = true;
 
-    ctx.detach(window, 'error', logBrowserErrors);
     ctx.attach(window, 'error', logBrowserErrors);
 
     ctx.waitFor = opt.cssSelector ? waitForAll : waitFor;
@@ -156,7 +156,7 @@ module.exports = function(opt) {
       waitFor: ctx.waitFor,
       waitForAll: ctx.waitForAll,
       test: testWrapper(),
-    }, opt.helpers ? opt.helpers(ctx) : {});
+    }, opt.helpers(ctx));
   }
 
   function testWrapper() {
@@ -178,5 +178,15 @@ module.exports = function(opt) {
     for(var key in e)
       message += '\n' + key + '=' + e[key];
     return message;
+  }
+
+  function createHelpers(context) {
+    context.window = null;
+    load();
+    context.attach(context.iframe, 'load', load);
+    return context;
+    function load() {
+      context.window = context.iframe.contentWindow;
+    }
   }
 };
