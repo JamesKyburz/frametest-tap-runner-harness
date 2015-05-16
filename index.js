@@ -4,7 +4,10 @@ var test      = require('tape');
 var through   = require('through2');
 var tapParser = require('tap-parser');
 
-module.exports = function(opt) {
+module.exports = runner;
+module.exports.createHelpers = createHelpers;
+
+function runner(opt) {
   opt.harness = harness;
   var ctx, wnd, testResults, logResults;
 
@@ -179,14 +182,14 @@ module.exports = function(opt) {
       message += '\n' + key + '=' + e[key];
     return message;
   }
+}
 
-  function createHelpers(context) {
-    context.window = null;
-    load();
-    context.attach(context.iframe, 'load', load);
-    return context;
-    function load() {
-      context.window = context.iframe.contentWindow;
-    }
+function createHelpers(context) {
+  context.window = null;
+  load();
+  context.attach(context.iframe, 'load', load);
+  return context;
+  function load() {
+    context.window = context.iframe.contentWindow;
   }
-};
+}
