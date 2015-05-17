@@ -19,7 +19,7 @@
     "email": "james.kyburz@gmail.com"
   },
   "dependencies": {
-    "frametest": "0.0.9",
+    "frametest": "0.0.10",
     "tap-parser": "^1.1.3",
     "tape": "^4.0.0",
     "through2": "^0.6.5"
