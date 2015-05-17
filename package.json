@@ -1,7 +1,7 @@
 {
   "name": "frametest-tap-runner-harness",
   "description": "tap test runner harness for frametest",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "main": "index.js",
   "scripts": {},
   "keywords": [
