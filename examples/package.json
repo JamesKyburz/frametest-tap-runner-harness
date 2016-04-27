@@ -4,12 +4,12 @@
   "version": "0.0.0",
   "main": "index.js",
   "dependencies": {
-    "brfs": "^1.2.0",
-    "browserify": "^9.0.8",
-    "ecstatic": "^0.7.4",
-    "querystring": "^0.2.0",
-    "stack": "~0.1.0",
-    "tiny-route": "~2.1.1"
+    "brfs": "1.4.3",
+    "browserify": "13.0.0",
+    "ecstatic": "1.4.0",
+    "querystring": "0.2.0",
+    "stack": "0.1.0",
+    "tiny-route": "2.1.2"
   },
   "devDependencies": {},
   "scripts": {},

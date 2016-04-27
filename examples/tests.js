@@ -21,7 +21,9 @@ function createHelpers(context) {
   }
 
   function redirect(href) {
-    helpers.window.location.href = href;
+    setTimeout(function () {
+      helpers.window.location.href = href;
+    })
   };
 }
 
