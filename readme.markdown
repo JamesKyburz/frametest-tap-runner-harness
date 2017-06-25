@@ -1,5 +1,7 @@
 # frametest-tap-runner-harness
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/JamesKyburz/frametest-tap-runner-harness.svg)](https://greenkeeper.io/)
+
 Using frametest and tap to automate tests
 
 # install
